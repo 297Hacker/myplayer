@@ -1,8 +1,10 @@
 import React from 'react';
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import LastFMData from '../components/FetchData/FetchData';
 
-const Home: React.FC = () => {
+
+const Home = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -12,6 +14,7 @@ const Home: React.FC = () => {
       </Head>
 
       <main className={styles.main}>
+          <LastFMData/>
       </main>
 
       <footer className={styles.footer}>
