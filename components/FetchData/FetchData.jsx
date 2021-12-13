@@ -1,45 +1,52 @@
 import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 
-const artist = "Drake";
-const key = 'd732731be2f5f0ec4b10e5a3607d7090';
+const coverContent = styled.figure`
+    border: 1px #cccccc solid;
+`;
 
-const LastFMData = () => {
-    const [lfmData, updateLfmData] = useState({});
+const LastFMData = ({artist, APIkey}) => {
+    const [lfmData, setLfmData] = useState({});
     useEffect(() => {
-        fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${artist}&api_key=${key}&format=json`)
+        fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=${artist}&api_key=${APIkey}&format=json`)
             .then(response => {
                 if (response.ok) {
-                    console.log(response);
                     return response.json();
                 }
-                throw new Error('error');
+                throw new Error(error)
             })
-            .then(data => updateLfmData(data))
+            .then(data => setLfmData(data))
             .catch(() =>
-                updateLfmData({ error: 'Something went wrong with Last.fm' })
+                setLfmData({error: 'Something went wrong!'})
             );
     }, []);
 
-    const buildLastFmData = () => {
-        const  { error } = lfmData;
-        const track = lfmData?.recenttracks?.track;
+    const buildFMData = () => {
+        const {error} = lfmData;
+        const track = lfmData?.topalbums?.album;
 
         if (error) {
             return <p>{error}</p>;
         }
 
         if (!track) {
-            return <p>Loading</p>;
+            return <p>Loading..</p>
         }
 
         const [
-            { name: songName, artist: { '#text': artistName } = {} } = {}
+            {name: albumName, image: {'#text': cover} = {}} = {}
         ] = track;
 
-        return <h3>Currently listening to: {songName} by {artistName}</h3>;
+        return <section>
+            <p>You are listing to: {albumName}</p>
+            <coverContent>
+                <img src={cover}/>
+                <figcaption>{albumName}</figcaption>
+            </coverContent>
+        </section>
     };
 
-    return buildLastFmData();
+    return buildFMData();
 };
 
 export default LastFMData;
