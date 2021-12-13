@@ -1,8 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
-const coverContent = styled.figure`
-    border: 1px #cccccc solid;
+const ArtistContent = styled.section`
+    background-color: #0000FF;
+    border-radius: 5px;
+    color: #FFFFFF;
+    height: fit-content;
+    text-align: center;
+    width:  300px;
 `;
 
 const LastFMData = ({artist, APIkey}) => {
@@ -33,17 +38,13 @@ const LastFMData = ({artist, APIkey}) => {
             return <p>Loading..</p>
         }
 
-        const [
-            {name: albumName, image: {'#text': cover} = {}} = {}
-        ] = track;
+        const [{name: albumName, playcount: totalPlays}] = track;
 
-        return <section>
-            <p>You are listing to: {albumName}</p>
-            <coverContent>
-                <img src={cover}/>
-                <figcaption>{albumName}</figcaption>
-            </coverContent>
-        </section>
+        return <ArtistContent>
+            <h1>{artist}</h1>
+            <p>Top albums: {albumName}</p>
+            <p>Plays: {totalPlays}</p>
+        </ArtistContent>
     };
 
     return buildFMData();
